@@ -1,24 +1,11 @@
-/*function getRandomfromRange (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return (max<min || max <0 || min <0) ? 0 : Math.floor(Math.random() * (max - min + 1)) + min;
-}
-getRandomfromRange (13, 32);
-
-function getRandomFloating (min, max, decimal) {
-  const result = (max < min || max <0 || min <0) ? 0 : (Math.random() * (max - min + 1)) + min;
-  return result.toFixed(decimal);
-}
-getRandomFloating (5.754, 60.5, 4);*/
-
 const AVATARS = [];
 
 const avatarImage = 'img/avatars/user{{xx}}.png';
 for (let i = 1; i < 10; i++) {
-  const newAvatarImage = avatarImage.replace('{{xx}}', `0${  i}`);
+  const newAvatarImage = avatarImage.replace('{{xx}}', '0' + i );
   AVATARS.push(newAvatarImage);
 }
-const lastAvatarImage = avatarImage.replace('{{xx}}', 10);
+const lastAvatarImage = avatarImage.replace('{{xx}}', '10');
 AVATARS.push(lastAvatarImage);
 
 const TITLES = [
@@ -100,29 +87,30 @@ const getRandomArrayLength = ([...array], length) =>
 
 const SIMILAR_AD_COUNT = 10;
 
-const createAdDescription = () => ({
-  author: {
-    avatar: AVATARS[getRandomPositiveInteger(0, AVATARS.length-1)],
-  },
-  offer: {
-    title: TITLES[getRandomPositiveInteger(0, TITLES.length-1)],
-
-    address: location.lat + ',' + location.lng,
-
-    price: getRandomPositiveInteger(PRICES.minPrice, PRICES.maxPrice),
-    type: TYPES[getRandomPositiveInteger(0, TYPES.length-1)],
-    rooms: getRandomPositiveInteger(ROOMS.minRoomsNumber, ROOMS.maxRoomsNumber),
-    guests: getRandomPositiveInteger(GUESTS.minGuestsNumber, GUESTS.maxGuestsNumber ),
-    checkin: CHECKIN_HOURS[getRandomPositiveInteger(0, CHECKIN_HOURS.length-1)],
-    checkout: CHECKOUT_HOURS[getRandomPositiveInteger(0, CHECKOUT_HOURS.length-1)],
-    features: getRandomArrayLength(FEATURES, FEATURES.length),
-    description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length-1)],
-    photos: getRandomArrayLength(PHOTOS, PHOTOS.length),
-  },
-  location: {
-    lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
-    lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
-  },
-});
+const createAdDescription = () => {
+  return {
+    author: {
+      avatar: AVATARS[getRandomPositiveInteger(0, AVATARS.length-1)],
+    },
+    offer: {
+      title: TITLES[getRandomPositiveInteger(0, TITLES.length-1)],
+      address: location.lat + ',' + location.lng,
+      price: getRandomPositiveInteger(PRICES.minPrice, PRICES.maxPrice),
+      type: TYPES[getRandomPositiveInteger(0, TYPES.length-1)],
+      rooms: getRandomPositiveInteger(ROOMS.minRoomsNumber, ROOMS.maxRoomsNumber),
+      guests: getRandomPositiveInteger(GUESTS.minGuestsNumber, GUESTS.maxGuestsNumber ),
+      checkin: CHECKIN_HOURS[getRandomPositiveInteger(0, CHECKIN_HOURS.length-1)],
+      checkout: CHECKOUT_HOURS[getRandomPositiveInteger(0, CHECKOUT_HOURS.length-1)],
+      features: getRandomArrayLength(FEATURES, FEATURES.length),
+      description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length-1)],
+      photos: getRandomArrayLength(PHOTOS, PHOTOS.length),
+    },
+    location: {
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    },
+  };};
 
 const similarAds = Array.from({length: SIMILAR_AD_COUNT}, createAdDescription);
+
+console.log(similarAds);
