@@ -1,8 +1,8 @@
 const AVATARS = [];
 
 const avatarImage = 'img/avatars/user{{xx}}.png';
-for (let i = 1; i < 10; i++) {
-  const newAvatarImage = avatarImage.replace('{{xx}}', '0' + i );
+for (let index = 1; index < 10; index++) {
+  const newAvatarImage = avatarImage.replace('{{xx}}', `0${  index}` );
   AVATARS.push(newAvatarImage);
 }
 const lastAvatarImage = avatarImage.replace('{{xx}}', '10');
@@ -66,21 +66,21 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const getRandomPositiveInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+const getRandomPositiveInteger = (num1, num2) => {
+  const lower = Math.ceil(Math.min(Math.abs(num1), Math.abs(num2)));
+  const upper = Math.floor(Math.max(Math.abs(num1), Math.abs(num2)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
 
-const getRandomPositiveFloat = (a, b, digits) => {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
+const getRandomPositiveFloat = (num1, num2, digits) => {
+  const lower = Math.min(Math.abs(num1), Math.abs(num2));
+  const upper = Math.max(Math.abs(num1), Math.abs(num2));
   const result = Math.random() * (upper - lower) + lower;
   return parseFloat(result.toFixed(digits));
 };
 
-const getRandomArrayLength = ([...array], length) =>
+const getRandomArray = ([...array], length) =>
   Array.from({length: Math.min(array.length, Math.floor(Math.random() * length + 1))},
     () => array.splice(Math.random() * array.length, 1).join(),
   );
@@ -88,29 +88,33 @@ const getRandomArrayLength = ([...array], length) =>
 const SIMILAR_AD_COUNT = 10;
 
 const createAdDescription = () => {
+
+  const coords = {
+    lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+    lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+  };
   return {
     author: {
       avatar: AVATARS[getRandomPositiveInteger(0, AVATARS.length-1)],
     },
     offer: {
       title: TITLES[getRandomPositiveInteger(0, TITLES.length-1)],
-      address: location.lat + ',' + location.lng,
+      address: `${coords.lat  },${  coords.lng}`,
       price: getRandomPositiveInteger(PRICES.minPrice, PRICES.maxPrice),
       type: TYPES[getRandomPositiveInteger(0, TYPES.length-1)],
       rooms: getRandomPositiveInteger(ROOMS.minRoomsNumber, ROOMS.maxRoomsNumber),
       guests: getRandomPositiveInteger(GUESTS.minGuestsNumber, GUESTS.maxGuestsNumber ),
       checkin: CHECKIN_HOURS[getRandomPositiveInteger(0, CHECKIN_HOURS.length-1)],
       checkout: CHECKOUT_HOURS[getRandomPositiveInteger(0, CHECKOUT_HOURS.length-1)],
-      features: getRandomArrayLength(FEATURES, FEATURES.length),
+      features: getRandomArray(FEATURES, FEATURES.length),
       description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length-1)],
-      photos: getRandomArrayLength(PHOTOS, PHOTOS.length),
+      photos: getRandomArray(PHOTOS, PHOTOS.length),
     },
-    location: {
-      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
-      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    coords: {
+      lat: coords.lat,
+      lng: coords.lng,
     },
   };};
 
+// eslint-disable-next-line no-unused-vars
 const similarAds = Array.from({length: SIMILAR_AD_COUNT}, createAdDescription);
-
-console.log(similarAds);
