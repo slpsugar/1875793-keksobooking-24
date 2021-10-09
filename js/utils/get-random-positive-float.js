@@ -1,13 +1,12 @@
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 
-// eslint-disable-next-line no-unused-vars
-function getRandomPositiveFloat (num1, num2, digits = 1) {
+function getRandomPositiveFloat (a, b, digits = 1) {
   // Чтобы не заставлять пользователя нашей функции помнить порядок аргументов,
   // реализуем поддержку передачи минимального и максимального значения в любом порядке,
   // а какое из них большее и меньшее вычислим с помощью Math.min и Math.max
-  const lower = Math.min(Math.abs(num1), Math.abs(num2));
-  const upper = Math.max(Math.abs(num1), Math.abs(num2));
+  const lower = Math.min(Math.abs(a), Math.abs(b));
+  const upper = Math.max(Math.abs(a), Math.abs(b));
   // Обратите внимание, чтобы учесть условие, что диапазон может быть [0, ∞),
   // мы не ругаем пользователя за переданное отрицательное число,
   // а просто берём его по модулю с помощью Math.abs
