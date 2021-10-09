@@ -1,5 +1,5 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray} from './utils.js';
-import {AVATARS, TITLES, PRICES, TYPES, ROOMS, GUESTS, CHECKIN_HOURS, CHECKOUT_HOURS, FEATURES, DESCRIPTIONS, PHOTOS} from './initial-values';
+import {AVATARS, TITLES, PRICES, TYPES, ROOMS, GUESTS, CHECKIN_HOURS, CHECKOUT_HOURS, FEATURES, DESCRIPTIONS, PHOTOS} from './initial-values.js';
 
 const SIMILAR_AD_COUNT = 10;
 
