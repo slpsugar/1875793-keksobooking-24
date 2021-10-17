@@ -22,14 +22,6 @@ const PRICES = {
   maxPrice: 1000000,
 };
 
-const accomodationTypes = [
-  'Дворец',
-  'Квартира',
-  'Дом',
-  'Бунгало',
-  'Отель',
-];
-
 const TYPES = [
   'palace',
   'flat',
@@ -37,9 +29,6 @@ const TYPES = [
   'bungalow',
   'hotel',
 ];
-
-for (let i=0; i<TYPES.length; i++) {
-  TYPES[i] = accomodationTypes[i];}
 
 const ROOMS = {
   minRoomsNumber: 1,
@@ -66,10 +55,10 @@ const CHECKOUT_HOURS = [
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 const DESCRIPTIONS = [
-  'Situated in a popular vibrant area. With our prime location, you are never more than a few munites walk from popular destinations.',
-  'Decorated to a high standard with newly refurbished ensuite bathrooms.',
-  'We are one of the places which boasts being sei-rural whilst being extremely close to all surrounding areas. Dogs are welcome at the property.',
-  'Place for a perfect short break! Pool passes are not included in the price, but can be purchased on arrival (passes are subject to availability).',
+  'Расположен в современном районе. До ближайших достопримечательностей несколько минут пешком.',
+  'Комната с новым ремонтом и со своей ванной комнатой.',
+  'Мы находимся очень близко ко всем популярным местам города, несмотря на наше расположение в полусельском пригороде. Будем рады гостям с домашними животными.',
+  'Прекрасное место для короткого отдыха. В стоимость не входят билеты в бассейн, их можно приобрести по прибытии (наличие уточняйте на стойке администратора).',
 ];
 
 const PHOTOS = [
