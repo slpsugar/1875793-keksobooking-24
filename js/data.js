@@ -32,12 +32,12 @@ const TYPES = [
 
 const ROOMS = {
   minRoomsNumber: 1,
-  maxRoomsNumber: 3,
+  maxRoomsNumber: 100,
 };
 
 const GUESTS = {
   minGuestsNumber: 0,
-  maxGuestsNumber: 2,
+  maxGuestsNumber: 3,
 };
 
 const CHECKIN_HOURS = [
