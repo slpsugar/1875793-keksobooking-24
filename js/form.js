@@ -1,3 +1,5 @@
+const formContainer = document.querySelector('.ad-form');
+
 const formTitleInput = document.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -5,7 +7,7 @@ const MAX_PRICE_VALUE = 1000000;
 
 const formPriceInput = document.querySelector('#price');
 const formRoomNumberInput = document.querySelector('#room_number');
-const formGuestNumber = document.querySelector('#capacity').querySelectorAll('option');
+const formGuestNumberInput = document.querySelector('#capacity');
 
 formTitleInput.addEventListener('input', () => {
   const titleLength = formTitleInput.value.length;
@@ -30,27 +32,37 @@ formPriceInput.addEventListener('input', () => {
   formPriceInput.reportValidity();
 });
 
-
-formRoomNumberInput.addEventListener('input', () => {
+function compareValues () {
   const roomNumberValue = formRoomNumberInput.value;
-  formGuestNumber.forEach((number) => {number.setAttribute('disabled','');});
+  const guestNumberValue = formGuestNumberInput.value;
+  const ratio = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0'],
+  };
+  return ratio[roomNumberValue].includes(guestNumberValue);
+}
 
-  if (roomNumberValue === '1') {
-    formGuestNumber[2].removeAttribute('disabled','');
-    //formRoomNumberInput.setCustomValidity('Для 1 гостя');
-  } else if (roomNumberValue === '100') {
-    formGuestNumber[3].removeAttribute('disabled','');
-    //formRoomNumberInput.setCustomValidity('Не для гостей');
-  } else if (roomNumberValue === '2') {
-    formGuestNumber[1].removeAttribute('disabled','');
-    formGuestNumber[2].removeAttribute('disabled','');
-    //formRoomNumberInput.setCustomValidity('Для 1 или 2 гостей');
-  } else if (roomNumberValue === '3') {
-    formGuestNumber[0].removeAttribute('disabled','');
-    formGuestNumber[1].removeAttribute('disabled','');
-    formGuestNumber[2].removeAttribute('disabled','');
-    //formRoomNumberInput.setCustomValidity('От 1 до 3 гостей');
+function validateFileds () {
+  if (!compareValues()) {
+    formGuestNumberInput.setCustomValidity('Неверное число гостей');
+    formGuestNumberInput.reportValidity();
+    return false;
+  } else {
+    formGuestNumberInput.setCustomValidity('');
+    formGuestNumberInput.reportValidity();
+    return true;
   }
-  formRoomNumberInput.reportValidity();
+}
+
+formRoomNumberInput.addEventListener('input', validateFileds);
+formGuestNumberInput.addEventListener('input', validateFileds);
+
+formContainer.addEventListener('submit', (evt) => {
+  if (!validateFileds) {
+    evt.preventDefault();
+  }
 });
+
 
