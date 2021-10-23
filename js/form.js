@@ -9,6 +9,9 @@ const formPriceInput = document.querySelector('#price');
 const formRoomNumberInput = document.querySelector('#room_number');
 const formGuestNumberInput = document.querySelector('#capacity');
 
+const formCheckinHours = document.querySelector('#timein');
+const formCheckoutHours = document.querySelector('#timeout');
+
 formTitleInput.addEventListener('input', () => {
   const titleLength = formTitleInput.value.length;
   if (titleLength<MIN_TITLE_LENGTH) {
@@ -58,6 +61,49 @@ function validateFileds () {
 
 formRoomNumberInput.addEventListener('input', validateFileds);
 formGuestNumberInput.addEventListener('input', validateFileds);
+
+// Время заезда и выезда
+
+function compareHours () {
+  const checkinHourValue = formCheckinHours.value;
+  const checkoutHourValue = formCheckoutHours.value;
+  const inOutRatio = {
+    '12:00': '12:00',
+    '13:00': '13:00',
+    '14:00': '14:00',
+  };
+  return inOutRatio[checkinHourValue].includes(checkoutHourValue);
+}
+
+function validateTimeIn () {
+  if (!compareHours()) {
+    for (let option = 0; option < formCheckoutHours.length; option++) {
+      if (formCheckoutHours[option].value === formCheckinHours.value) {
+        formCheckoutHours[option].selected = true;}
+    }
+    formCheckoutHours.setCustomValidity('');
+  } else {
+    formCheckoutHours.setCustomValidity('');
+  }
+  formCheckoutHours.reportValidity();
+}
+
+function validateTimeOut () {
+  if (!compareHours()) {
+    for (let option = 0; option < formCheckinHours.length; option++) {
+      if (formCheckinHours[option].value === formCheckoutHours.value) {
+        formCheckinHours[option].selected = true;}
+    }
+    formCheckoutHours.setCustomValidity('');
+  } else {
+    formCheckoutHours.setCustomValidity('');
+  }
+  formCheckoutHours.reportValidity();
+}
+
+formCheckinHours.addEventListener('input', validateTimeIn);
+formCheckoutHours.addEventListener('input', validateTimeOut);
+
 
 formContainer.addEventListener('submit', (evt) => {
   if (!validateFileds) {
