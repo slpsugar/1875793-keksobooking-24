@@ -12,6 +12,8 @@ const formGuestNumberInput = document.querySelector('#capacity');
 const formCheckinHours = document.querySelector('#timein');
 const formCheckoutHours = document.querySelector('#timeout');
 
+const formAccomodationType = document.querySelector('#type');
+
 formTitleInput.addEventListener('input', () => {
   const titleLength = formTitleInput.value.length;
   if (titleLength<MIN_TITLE_LENGTH) {
@@ -29,13 +31,36 @@ formTitleInput.addEventListener('input', () => {
 formPriceInput.addEventListener('input', () => {
   if (formPriceInput.validity.rangeOverflow) {
     formPriceInput.setCustomValidity(`Максимальное значение - ${MAX_PRICE_VALUE}`);
-  } else {
+  }
+  else {
     formPriceInput.setCustomValidity('');
   }
   formPriceInput.reportValidity();
 });
 
-function compareValues () {
+// Стоимость жилья
+
+const newComparePrices = () => {
+  const accomodationType = formAccomodationType.value;
+  const minPrices = {
+    'bungalow': 0,
+    'flat': 1000,
+    'hotel': 3000,
+    'house': 5000,
+    'palace': 10000,
+  };
+  for (let type = 0; type <formAccomodationType.length; type++){
+    formPriceInput.setAttribute('min', minPrices[accomodationType]);
+    formPriceInput.placeholder = minPrices[accomodationType];
+  }
+  formPriceInput.reportValidity();
+};
+
+formAccomodationType.addEventListener('input', newComparePrices);
+
+// Количество гостей
+
+function compareGuests () {
   const roomNumberValue = formRoomNumberInput.value;
   const guestNumberValue = formGuestNumberInput.value;
   const ratio = {
@@ -47,8 +72,8 @@ function compareValues () {
   return ratio[roomNumberValue].includes(guestNumberValue);
 }
 
-function validateFileds () {
-  if (!compareValues()) {
+function validateGuestNumberFiled () {
+  if (!compareGuests()) {
     formGuestNumberInput.setCustomValidity('Неверное число гостей');
     formGuestNumberInput.reportValidity();
     return false;
@@ -59,8 +84,8 @@ function validateFileds () {
   }
 }
 
-formRoomNumberInput.addEventListener('input', validateFileds);
-formGuestNumberInput.addEventListener('input', validateFileds);
+formRoomNumberInput.addEventListener('input', validateGuestNumberFiled);
+formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
 
 // Время заезда и выезда
 
@@ -80,18 +105,7 @@ function validateTimeIn () {
     for (let option = 0; option < formCheckoutHours.length; option++) {
       if (formCheckoutHours[option].value === formCheckinHours.value) {
         formCheckoutHours[option].selected = true;}
-    }
-    formCheckoutHours.setCustomValidity('');
-  } else {
-    formCheckoutHours.setCustomValidity('');
-  }
-  formCheckoutHours.reportValidity();
-}
-
-function validateTimeOut () {
-  if (!compareHours()) {
-    for (let option = 0; option < formCheckinHours.length; option++) {
-      if (formCheckinHours[option].value === formCheckoutHours.value) {
+      else if (formCheckinHours[option].value === formCheckoutHours.value) {
         formCheckinHours[option].selected = true;}
     }
     formCheckoutHours.setCustomValidity('');
@@ -102,11 +116,10 @@ function validateTimeOut () {
 }
 
 formCheckinHours.addEventListener('input', validateTimeIn);
-formCheckoutHours.addEventListener('input', validateTimeOut);
-
+formCheckoutHours.addEventListener('input', validateTimeIn);
 
 formContainer.addEventListener('submit', (evt) => {
-  if (!validateFileds) {
+  if (!validateGuestNumberFiled) {
     evt.preventDefault();
   }
 });
