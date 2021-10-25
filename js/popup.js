@@ -73,9 +73,9 @@ similarAds.forEach(({author, offer}) => {
   if (!offer.photos) {
     adElements.querySelector('.popup__photos').remove();
   } else {
-    for (let i=0; i < offer.photos.length; i++) {
+    for (let photoIndex=0; photoIndex < offer.photos.length; photoIndex++) {
       const imageSource = adElements.querySelector('.popup__photos').querySelector('img').cloneNode(true);
-      imageSource.src = offer.photos[i];
+      imageSource.src = offer.photos[photoIndex];
       adElements.querySelector('.popup__photos').appendChild(imageSource);
     }
     adElements.querySelector('.popup__photos').children[0].remove();
