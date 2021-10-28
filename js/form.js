@@ -89,46 +89,13 @@ formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
 
 // Время заезда и выезда
 
-function validateTime () {
-  const checkinHourValue = formCheckinHours.value;
-  const checkoutHourValue = formCheckoutHours.value;
-  const inOutRatio = {
-    '12:00': '12:00',
-    '13:00': '13:00',
-    '14:00': '14:00',
-  };
-
-  for (let timeOption = 0; timeOption < formCheckinHours.length; timeOption++){
-    const newOut = formCheckoutHours[timeOption];
-    newOut.value = checkinHourValue;
-    //newOut.selected = true;
-  }
-  //return inOutRatio[checkinHourValue].includes(checkoutHourValue);
-  if (inOutRatio[checkinHourValue].includes(checkoutHourValue)) {
-    formCheckoutHours.setCustomValidity('');
-  } else {
-    formCheckoutHours.setCustomValidity('Неверно');
-  }
-  formCheckoutHours.reportValidity();
+function syncTime (evt) {
+  formCheckinHours.value = evt.target.value;
+  formCheckoutHours.value = evt.target.value;
 }
 
-// function validateTime () {
-//   if (!compareHours()) {
-//     for (let option = 0; option < formCheckoutHours.length; option++) {
-//       if (formCheckoutHours[option].value === formCheckinHours.value) {
-//         formCheckoutHours[option].selected = true;}
-//       else if (formCheckinHours[option].value === formCheckoutHours.value) {
-//         formCheckinHours[option].selected = true;}
-//     }
-//     formCheckoutHours.setCustomValidity('');
-//   } else {
-//     formCheckoutHours.setCustomValidity('');
-//   }
-//   formCheckoutHours.reportValidity();
-// }
-
-formCheckinHours.addEventListener('input', validateTime);
-formCheckoutHours.addEventListener('input', validateTime);
+formCheckinHours.addEventListener('input', syncTime);
+formCheckoutHours.addEventListener('input', syncTime);
 
 formContainer.addEventListener('submit', (evt) => {
   if (!validateGuestNumberFiled) {

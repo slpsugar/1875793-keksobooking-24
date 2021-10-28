@@ -1,4 +1,5 @@
-import {similarAds} from'./popup.js';
+import {createSimilarAds } from './data.js';
+import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
 
 const COORDS_DIGITS = 5;
@@ -8,8 +9,7 @@ const CITY_CENTRE_TOKYO = {
   lng: 139.839478,
 };
 
-const points = similarAds;
-console.log(points);
+const points = createSimilarAds();
 
 const formAddressInput = document.querySelector('#address');
 formAddressInput.value = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
@@ -52,8 +52,7 @@ mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
 
 points.forEach((point) => {
-  const {author, offer, coords} = point;
-  console.log(point);
+  const {coords} = point;
 
   const adMarker = L.marker({
     lat: coords.lat,
@@ -64,6 +63,6 @@ points.forEach((point) => {
   },
   );
 
-  adMarker.addTo(map).bindPopup(offer.title);
+  adMarker.addTo(map).bindPopup(createModal(point));
 });
 
