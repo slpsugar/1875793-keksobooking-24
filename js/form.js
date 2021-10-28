@@ -89,7 +89,7 @@ formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
 
 // Время заезда и выезда
 
-function compareHours () {
+function validateTime () {
   const checkinHourValue = formCheckinHours.value;
   const checkoutHourValue = formCheckoutHours.value;
   const inOutRatio = {
@@ -97,26 +97,38 @@ function compareHours () {
     '13:00': '13:00',
     '14:00': '14:00',
   };
-  return inOutRatio[checkinHourValue].includes(checkoutHourValue);
-}
 
-function validateTimeIn () {
-  if (!compareHours()) {
-    for (let option = 0; option < formCheckoutHours.length; option++) {
-      if (formCheckoutHours[option].value === formCheckinHours.value) {
-        formCheckoutHours[option].selected = true;}
-      else if (formCheckinHours[option].value === formCheckoutHours.value) {
-        formCheckinHours[option].selected = true;}
-    }
+  for (let timeOption = 0; timeOption < formCheckinHours.length; timeOption++){
+    const newOut = formCheckoutHours[timeOption];
+    newOut.value = checkinHourValue;
+    //newOut.selected = true;
+  }
+  //return inOutRatio[checkinHourValue].includes(checkoutHourValue);
+  if (inOutRatio[checkinHourValue].includes(checkoutHourValue)) {
     formCheckoutHours.setCustomValidity('');
   } else {
-    formCheckoutHours.setCustomValidity('');
+    formCheckoutHours.setCustomValidity('Неверно');
   }
   formCheckoutHours.reportValidity();
 }
 
-formCheckinHours.addEventListener('input', validateTimeIn);
-formCheckoutHours.addEventListener('input', validateTimeIn);
+// function validateTime () {
+//   if (!compareHours()) {
+//     for (let option = 0; option < formCheckoutHours.length; option++) {
+//       if (formCheckoutHours[option].value === formCheckinHours.value) {
+//         formCheckoutHours[option].selected = true;}
+//       else if (formCheckinHours[option].value === formCheckoutHours.value) {
+//         formCheckinHours[option].selected = true;}
+//     }
+//     formCheckoutHours.setCustomValidity('');
+//   } else {
+//     formCheckoutHours.setCustomValidity('');
+//   }
+//   formCheckoutHours.reportValidity();
+// }
+
+formCheckinHours.addEventListener('input', validateTime);
+formCheckoutHours.addEventListener('input', validateTime);
 
 formContainer.addEventListener('submit', (evt) => {
   if (!validateGuestNumberFiled) {

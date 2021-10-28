@@ -1,8 +1,6 @@
 import {createSimilarAds} from './data.js';
 
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
-const map = document.querySelector('#map-canvas');
-
 const similarAds = createSimilarAds();
 
 similarAds.forEach(({author, offer}) => {
@@ -86,8 +84,7 @@ similarAds.forEach(({author, offer}) => {
   } else {
     adElements.querySelector('.popup__avatar').src = author.avatar;
   }
-
-  map.appendChild(adElements);
 });
 
 
+export {similarAds};
