@@ -89,34 +89,13 @@ formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
 
 // Время заезда и выезда
 
-function compareHours () {
-  const checkinHourValue = formCheckinHours.value;
-  const checkoutHourValue = formCheckoutHours.value;
-  const inOutRatio = {
-    '12:00': '12:00',
-    '13:00': '13:00',
-    '14:00': '14:00',
-  };
-  return inOutRatio[checkinHourValue].includes(checkoutHourValue);
+function syncTime (evt) {
+  formCheckinHours.value = evt.target.value;
+  formCheckoutHours.value = evt.target.value;
 }
 
-function validateTimeIn () {
-  if (!compareHours()) {
-    for (let option = 0; option < formCheckoutHours.length; option++) {
-      if (formCheckoutHours[option].value === formCheckinHours.value) {
-        formCheckoutHours[option].selected = true;}
-      else if (formCheckinHours[option].value === formCheckoutHours.value) {
-        formCheckinHours[option].selected = true;}
-    }
-    formCheckoutHours.setCustomValidity('');
-  } else {
-    formCheckoutHours.setCustomValidity('');
-  }
-  formCheckoutHours.reportValidity();
-}
-
-formCheckinHours.addEventListener('input', validateTimeIn);
-formCheckoutHours.addEventListener('input', validateTimeIn);
+formCheckinHours.addEventListener('input', syncTime);
+formCheckoutHours.addEventListener('input', syncTime);
 
 formContainer.addEventListener('submit', (evt) => {
   if (!validateGuestNumberFiled) {

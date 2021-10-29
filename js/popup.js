@@ -1,11 +1,6 @@
-import {createSimilarAds} from './data.js';
-
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
-const map = document.querySelector('#map-canvas');
 
-const similarAds = createSimilarAds();
-
-similarAds.forEach(({author, offer}) => {
+function createModal ({author, offer}) {
   const localTypes = {
     'palace': 'Дворец',
     'flat': 'Квартира',
@@ -86,8 +81,7 @@ similarAds.forEach(({author, offer}) => {
   } else {
     adElements.querySelector('.popup__avatar').src = author.avatar;
   }
+  return adElements;
+}
 
-  map.appendChild(adElements);
-});
-
-
+export {createModal};
