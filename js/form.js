@@ -1,3 +1,5 @@
+import {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords} from './pins.js';
+
 const formContainer = document.querySelector('.ad-form');
 
 const messageOnSuccess = document.querySelector('#success').content.querySelector('.success');
@@ -132,29 +134,31 @@ document.addEventListener('keydown', (evt) => {
   if (document.body.contains(messageOnSuccess)) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      messageOnSuccess.remove();
-      formContainer.reset();
+      hideMessageOnSuccess();
     }
   }
   if (document.body.contains(messageOnError)) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      messageOnError.remove();
+      hideMessageOnError();
     }
   }
 });
 
-messageOnSuccess.addEventListener('click', () => {
+function hideMessageOnSuccess () {
   messageOnSuccess.remove();
   formContainer.reset();
-});
+  formAddressInput.value = initialCoords;
+  map.setView(CITY_CENTRE_TOKYO, 12);
+  mainMarker.setLatLng(CITY_CENTRE_TOKYO);
+}
 
-messageOnError.addEventListener('click', () => {
+function hideMessageOnError () {
   messageOnError.remove();
-});
+}
 
-buttonError.addEventListener('click', () => {
-  messageOnError.remove();
-});
+messageOnSuccess.addEventListener('click', hideMessageOnSuccess);
+messageOnError.addEventListener('click', hideMessageOnError);
+buttonError.addEventListener('click', hideMessageOnError);
 
 
