@@ -1,5 +1,9 @@
 const formContainer = document.querySelector('.ad-form');
 
+const messageOnSuccess = document.querySelector('#success').content.querySelector('.success');
+const messageOnError = document.querySelector('#error').content.querySelector('.error');
+const buttonError = messageOnError.querySelector('.error__button');
+
 const formTitleInput = document.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -97,10 +101,60 @@ function syncTime (evt) {
 formCheckinHours.addEventListener('input', syncTime);
 formCheckoutHours.addEventListener('input', syncTime);
 
+// Отправка формы
+
 formContainer.addEventListener('submit', (evt) => {
-  if (!validateGuestNumberFiled) {
-    evt.preventDefault();
+  evt.preventDefault();
+
+  const formData = new FormData(evt.target);
+
+  fetch(
+    'https://24.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      body: formData,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        document.body.appendChild(messageOnSuccess);
+      } else {
+        document.body.appendChild(messageOnError);
+      }
+    })
+    .catch(() => {
+      document.body.appendChild(messageOnError);
+    });
+});
+
+
+document.addEventListener('keydown', (evt) => {
+  if (document.body.contains(messageOnSuccess)) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      messageOnSuccess.remove();
+      formContainer.reset();
+    }
   }
+  if (document.body.contains(messageOnError)) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      messageOnError.remove();
+    }
+  }
+});
+
+messageOnSuccess.addEventListener('click', () => {
+  messageOnSuccess.remove();
+  formContainer.reset();
+});
+
+messageOnError.addEventListener('click', () => {
+  messageOnError.remove();
+});
+
+buttonError.addEventListener('click', () => {
+  messageOnError.remove();
 });
 
 

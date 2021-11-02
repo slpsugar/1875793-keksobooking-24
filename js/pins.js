@@ -1,4 +1,4 @@
-import {createSimilarAds } from './data.js';
+//import {createSimilarAds } from './data.js';
 import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
 
@@ -9,10 +9,23 @@ const CITY_CENTRE_TOKYO = {
   lng: 139.839478,
 };
 
-const points = createSimilarAds();
+const getData = () => {
+  fetch('https://24.javascript.pages.academy/keksobooking/data')
+    .then((response) => {
+      if (response.ok) {
+        response.json();
+      }
+    })
+    .then((data) => {
+      createModal(data);
+    });
+};
+
+const points = getData();
 
 const formAddressInput = document.querySelector('#address');
-formAddressInput.value = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
+const initialCoords = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
+formAddressInput.value = initialCoords;
 
 const map = L.map('map-canvas').on('load', () => {makePageActive();
 }).setView(CITY_CENTRE_TOKYO, 10);
@@ -50,6 +63,7 @@ function getCoordinates (evt) {
 
 mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
+
 
 points.forEach((point) => {
   const {coords} = point;
