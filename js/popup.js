@@ -51,13 +51,17 @@ function createModal ({author, offer}) {
   }
 
   const featuresList = adElements.querySelector('.popup__features');
-  featuresList.innerHTML = '';
-  offer.features.forEach((feature)  => {
-    const featureItem = document.createElement('li');
-    featureItem.classList.add('popup__feature');
-    featureItem.classList.add(`popup__feature--${  feature}`);
-    featuresList.appendChild(featureItem);
-  });
+  if (!offer.features) {
+    featuresList.remove();
+  } else {
+    featuresList.innerHTML = '';
+    offer.features.forEach((feature)  => {
+      const featureItem = document.createElement('li');
+      featureItem.classList.add('popup__feature');
+      featureItem.classList.add(`popup__feature--${  feature}`);
+      featuresList.appendChild(featureItem);
+    });
+  }
 
   if (!offer.description) {
     adElements.querySelector('.popup__description').remove();

@@ -1,21 +1,19 @@
-import {createSimilarAds } from './data.js';
 import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
+import {fetchData} from './data-remote.js';
 
 const COORDS_DIGITS = 5;
-
 const CITY_CENTRE_TOKYO = {
   lat: 35.652832,
   lng: 139.839478,
 };
 
-const points = createSimilarAds();
-
 const formAddressInput = document.querySelector('#address');
-formAddressInput.value = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
+const initialCoords = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
+formAddressInput.value = initialCoords;
 
 const map = L.map('map-canvas').on('load', () => {makePageActive();
-}).setView(CITY_CENTRE_TOKYO, 10);
+}).setView(CITY_CENTRE_TOKYO, 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -51,18 +49,22 @@ function getCoordinates (evt) {
 mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
 
-points.forEach((point) => {
-  const {coords} = point;
+function renderPoints (points) {
+  points.forEach((point) => {
+    const {location} = point;
 
-  const adMarker = L.marker({
-    lat: coords.lat,
-    lng: coords.lng,
-  },
-  {
-    icon: pinIcon,
-  },
-  );
+    const adMarker = L.marker({
+      lat: location.lat,
+      lng: location.lng,
+    },
+    {
+      icon: pinIcon,
+    },
+    );
 
-  adMarker.addTo(map).bindPopup(createModal(point));
-});
+    adMarker.addTo(map).bindPopup(createModal(point));
+  });
+}
+fetchData().then((points) => renderPoints(points));
 
+export {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords};
