@@ -156,6 +156,11 @@ function hideMessageOnSuccess () {
   mainMarker.setLatLng(CITY_CENTRE_TOKYO);
 }
 
+function resetForm (evt) {
+  evt.preventDefault();
+  hideMessageOnSuccess();
+}
+
 function hideMessageOnError () {
   messageOnError.remove();
 }
@@ -163,5 +168,5 @@ function hideMessageOnError () {
 messageOnSuccess.addEventListener('click', hideMessageOnSuccess);
 messageOnError.addEventListener('click', hideMessageOnError);
 errorButton.addEventListener('click', hideMessageOnError);
-resetButton.addEventListener('click', hideMessageOnSuccess);
+resetButton.addEventListener('click', resetForm);
 
