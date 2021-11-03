@@ -132,21 +132,6 @@ formContainer.addEventListener('submit', (evt) => {
 });
 
 
-document.addEventListener('keydown', (evt) => {
-  if (document.body.contains(messageOnSuccess)) {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      hideMessageOnSuccess();
-    }
-  }
-  if (document.body.contains(messageOnError)) {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      hideMessageOnError();
-    }
-  }
-});
-
 function hideMessageOnSuccess () {
   messageOnSuccess.remove();
   formContainer.reset();
@@ -164,6 +149,21 @@ function resetForm (evt) {
 function hideMessageOnError () {
   messageOnError.remove();
 }
+
+document.addEventListener('keydown', (evt) => {
+  if (document.body.contains(messageOnSuccess)) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      hideMessageOnSuccess();
+    }
+  }
+  if (document.body.contains(messageOnError)) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      hideMessageOnError();
+    }
+  }
+});
 
 messageOnSuccess.addEventListener('click', hideMessageOnSuccess);
 messageOnError.addEventListener('click', hideMessageOnError);
