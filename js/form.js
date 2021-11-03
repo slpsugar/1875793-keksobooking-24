@@ -1,10 +1,11 @@
 import {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords} from './pins.js';
 
 const formContainer = document.querySelector('.ad-form');
+const resetButton = formContainer.querySelector('.ad-form__reset');
 
 const messageOnSuccess = document.querySelector('#success').content.querySelector('.success');
 const messageOnError = document.querySelector('#error').content.querySelector('.error');
-const buttonError = messageOnError.querySelector('.error__button');
+const errorButton = messageOnError.querySelector('.error__button');
 
 const formTitleInput = document.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
@@ -19,6 +20,7 @@ const formCheckinHours = document.querySelector('#timein');
 const formCheckoutHours = document.querySelector('#timeout');
 
 const formAccomodationType = document.querySelector('#type');
+
 
 formTitleInput.addEventListener('input', () => {
   const titleLength = formTitleInput.value.length;
@@ -149,6 +151,7 @@ function hideMessageOnSuccess () {
   messageOnSuccess.remove();
   formContainer.reset();
   formAddressInput.value = initialCoords;
+  map.closePopup();
   map.setView(CITY_CENTRE_TOKYO, 12);
   mainMarker.setLatLng(CITY_CENTRE_TOKYO);
 }
@@ -159,6 +162,6 @@ function hideMessageOnError () {
 
 messageOnSuccess.addEventListener('click', hideMessageOnSuccess);
 messageOnError.addEventListener('click', hideMessageOnError);
-buttonError.addEventListener('click', hideMessageOnError);
-
+errorButton.addEventListener('click', hideMessageOnError);
+resetButton.addEventListener('click', hideMessageOnSuccess);
 
