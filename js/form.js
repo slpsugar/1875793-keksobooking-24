@@ -121,11 +121,11 @@ formContainer.addEventListener('submit', (evt) => {
   )
     .then((response) => {
       if (response.ok) {
-        document.body.appendChild(messageOnSuccess);
-      } else {
-        document.body.appendChild(messageOnError);
+        return response;
       }
+      throw new Error (`${response.status} ${response.statusText}`);
     })
+    .then (() => {document.body.appendChild(messageOnSuccess);})
     .catch(() => {
       document.body.appendChild(messageOnError);
     });

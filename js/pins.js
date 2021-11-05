@@ -2,6 +2,7 @@ import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
 import {fetchData} from './data-remote.js';
 
+const SIMILAR_ADS_COUNT = 10;
 const COORDS_DIGITS = 5;
 const CITY_CENTRE_TOKYO = {
   lat: 35.652832,
@@ -49,11 +50,12 @@ function getCoordinates (evt) {
 mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
 
-function renderPoints (points) {
+const firstLayerGroup = L.layerGroup().addTo(map);
+
+const renderPoints = (points) => {
   points.forEach((point) => {
     const {location} = point;
-
-    const adMarker = L.marker({
+    const marker = L.marker({
       lat: location.lat,
       lng: location.lng,
     },
@@ -61,10 +63,30 @@ function renderPoints (points) {
       icon: pinIcon,
     },
     );
-
-    adMarker.addTo(map).bindPopup(createModal(point));
+    marker.addTo(firstLayerGroup).bindPopup(createModal(point));
   });
+  return firstLayerGroup;
+};
+
+const firstLayerPoints = fetchData().then((points) => renderPoints(points.slice(0, SIMILAR_ADS_COUNT)));
+
+const mapFiltersContainer = document.querySelector('.map__filters');
+const housingType = mapFiltersContainer.querySelector('#housing-type');
+
+function compareTypes ({offer}) {
+  if (housingType.value === offer.type) {
+    return true;
+  } else if (housingType.value === 'any') {
+    return firstLayerPoints;
+  }
+  else {
+    return false;
+  }
 }
-fetchData().then((points) => renderPoints(points));
+
+housingType.addEventListener('input', () => {
+  firstLayerPoints.then(() => firstLayerGroup.clearLayers());
+  fetchData().then((points) => renderPoints(points.filter(compareTypes).slice(0, SIMILAR_ADS_COUNT)));
+});
 
 export {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords};
