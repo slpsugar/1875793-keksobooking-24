@@ -30,4 +30,5 @@ const fetchData = () =>
       showAlert('Произошла ошибка. Перезагрузите страницу.');
     });
 
+console.log(fetchData());
 export {fetchData};

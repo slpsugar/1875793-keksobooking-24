@@ -1,6 +1,10 @@
 import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
 import {fetchData} from './data-remote.js';
+import {housingType, chooseHousingType,
+  housingPrice, chooseHousingPriceRange,
+  housingRooms, chooseNumberOfRooms,
+  housingGuests, chooseNumberOfGuests} from './filter.js';
 
 const SIMILAR_ADS_COUNT = 10;
 const COORDS_DIGITS = 5;
@@ -9,12 +13,15 @@ const CITY_CENTRE_TOKYO = {
   lng: 139.839478,
 };
 
+//метки на карте
 const formAddressInput = document.querySelector('#address');
 const initialCoords = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
 formAddressInput.value = initialCoords;
 
-const map = L.map('map-canvas').on('load', () => {makePageActive();
-}).setView(CITY_CENTRE_TOKYO, 12);
+const map = L.map('map-canvas')
+  .on('load', () => {makePageActive();
+  })
+  .setView(CITY_CENTRE_TOKYO, 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -70,23 +77,40 @@ const renderPoints = (points) => {
 
 const firstLayerPoints = fetchData().then((points) => renderPoints(points.slice(0, SIMILAR_ADS_COUNT)));
 
-const mapFiltersContainer = document.querySelector('.map__filters');
-const housingType = mapFiltersContainer.querySelector('#housing-type');
-
-function compareTypes ({offer}) {
-  if (housingType.value === offer.type) {
-    return true;
-  } else if (housingType.value === 'any') {
-    return firstLayerPoints;
-  }
-  else {
-    return false;
-  }
-}
+//фильтрация
 
 housingType.addEventListener('input', () => {
   firstLayerPoints.then(() => firstLayerGroup.clearLayers());
-  fetchData().then((points) => renderPoints(points.filter(compareTypes).slice(0, SIMILAR_ADS_COUNT)));
+  fetchData().then((points) => renderPoints(points
+    .filter(chooseHousingType)
+    .slice(0, SIMILAR_ADS_COUNT)));
 });
 
-export {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords};
+housingPrice.addEventListener('input', () => {
+  firstLayerPoints.then(() => firstLayerGroup.clearLayers());
+  fetchData().then((points) => renderPoints(points
+    .filter(chooseHousingType)
+    .filter(chooseHousingPriceRange)
+    .slice(0, SIMILAR_ADS_COUNT)));
+});
+
+housingRooms.addEventListener('input', () => {
+  firstLayerPoints.then(() => firstLayerGroup.clearLayers());
+  fetchData().then((points) => renderPoints(points
+    .filter(chooseHousingType)
+    .filter(chooseHousingPriceRange)
+    .filter(chooseNumberOfRooms)
+    .slice(0, SIMILAR_ADS_COUNT)));
+});
+
+housingGuests.addEventListener('input', () => {
+  firstLayerPoints.then(() => firstLayerGroup.clearLayers());
+  fetchData().then((points) => renderPoints(points
+    .filter(chooseHousingType)
+    .filter(chooseHousingPriceRange)
+    .filter(chooseNumberOfRooms)
+    .filter(chooseNumberOfGuests)
+    .slice(0, SIMILAR_ADS_COUNT)));
+});
+
+export {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords, firstLayerPoints};
