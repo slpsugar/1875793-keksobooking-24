@@ -1,3 +1,5 @@
+import { makePageInactive } from './utils.js';
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 1000;
@@ -24,11 +26,11 @@ const fetchData = () =>
       if (response.ok) {
         return response.json();
       } else {
-        showAlert('Произошла ошибка. Перезагрузите страницу.');}
+        makePageInactive();
+        showAlert('Ошибка загрузки данных с сервера.');}
     })
     .catch(()=> {
-      showAlert('Произошла ошибка. Перезагрузите страницу.');
+      showAlert('Ошибка загрузки данных с сервера.');
     });
 
-console.log(fetchData());
 export {fetchData};
