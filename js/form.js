@@ -16,10 +16,10 @@ const formPriceInput = document.querySelector('#price');
 const formRoomNumberInput = document.querySelector('#room_number');
 const formGuestNumberInput = document.querySelector('#capacity');
 
-const formCheckinHours = document.querySelector('#timein');
-const formCheckoutHours = document.querySelector('#timeout');
+const formCheckinHoursInput = document.querySelector('#timein');
+const formCheckoutHoursInput = document.querySelector('#timeout');
 
-const formAccomodationType = document.querySelector('#type');
+const formAccomodationTypeInput = document.querySelector('#type');
 
 
 formTitleInput.addEventListener('input', () => {
@@ -48,8 +48,8 @@ formPriceInput.addEventListener('input', () => {
 
 // Стоимость жилья
 
-const newComparePrices = () => {
-  const accomodationType = formAccomodationType.value;
+const comparePrices = () => {
+  const accomodationType = formAccomodationTypeInput.value;
   const minPrices = {
     'bungalow': 0,
     'flat': 1000,
@@ -57,14 +57,14 @@ const newComparePrices = () => {
     'house': 5000,
     'palace': 10000,
   };
-  for (let type = 0; type <formAccomodationType.length; type++){
+  for (let type = 0; type <formAccomodationTypeInput.length; type++){
     formPriceInput.setAttribute('min', minPrices[accomodationType]);
     formPriceInput.placeholder = minPrices[accomodationType];
   }
   formPriceInput.reportValidity();
 };
 
-formAccomodationType.addEventListener('input', newComparePrices);
+formAccomodationTypeInput.addEventListener('input', comparePrices);
 
 // Количество гостей
 
@@ -98,12 +98,12 @@ formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
 // Время заезда и выезда
 
 function syncTime (evt) {
-  formCheckinHours.value = evt.target.value;
-  formCheckoutHours.value = evt.target.value;
+  formCheckinHoursInput.value = evt.target.value;
+  formCheckoutHoursInput.value = evt.target.value;
 }
 
-formCheckinHours.addEventListener('input', syncTime);
-formCheckoutHours.addEventListener('input', syncTime);
+formCheckinHoursInput.addEventListener('input', syncTime);
+formCheckoutHoursInput.addEventListener('input', syncTime);
 
 // Отправка формы
 

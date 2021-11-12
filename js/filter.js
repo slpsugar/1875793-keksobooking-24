@@ -3,13 +3,12 @@ const housingType = mapFiltersContainer.querySelector('#housing-type');
 const housingPrice = mapFiltersContainer.querySelector('#housing-price');
 const housingRooms = mapFiltersContainer.querySelector('#housing-rooms');
 const housingGuests = mapFiltersContainer.querySelector('#housing-guests');
-const featuresCheckboxes = document.querySelectorAll('.map__checkbox');
+const featuresCheckboxes = mapFiltersContainer.querySelectorAll('.map__checkbox');
+const FEATURES_VALUES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 //тип жилья
 function chooseHousingType ({offer}) {
-  if (housingType.value === offer.type || housingType.value === 'any') {
-    return true;
-  }
+  return (housingType.value === offer.type || housingType.value === 'any');
 }
 
 //цена
@@ -30,22 +29,12 @@ function chooseHousingPriceRange ({offer}) {
 
 //число комнат
 function chooseNumberOfRooms ({offer}) {
-  if (housingRooms.value === String(offer.rooms)) {
-    return true;
-  }
-  if (housingRooms.value === 'any') {
-    return offer.rooms > 3;
-  }
+  return (housingRooms.value === String(offer.rooms) || housingRooms.value === 'any');
 }
 
 //число гостей
 function chooseNumberOfGuests ({offer}) {
-  if (housingGuests.value === String(offer.guests)) {
-    return true;
-  }
-  if (housingGuests.value === 'any') {
-    return offer.guests > 2;
-  }
+  return (housingGuests.value === String(offer.guests) || housingGuests.value === 'any');
 }
 
 //удобства - сортировка
@@ -54,22 +43,7 @@ function rankFeatures ({offer}) {
   if (!offer.features) {
     return 0;
   }
-  if (offer.features.includes('wifi')) {
-    rank +=1;
-  }
-  if (offer.features.includes('dishwasher')) {
-    rank +=1;
-  }
-  if (offer.features.includes('parking')) {
-    rank +=1;
-  }
-  if (offer.features.includes('washer')) {
-    rank +=1;
-  }
-  if (offer.features.includes('elevator')) {
-    rank +=1;
-  }
-  if (offer.features.includes('conditioner')) {
+  if (FEATURES_VALUES.some((feature) => offer.features.includes(feature))) {
     rank +=1;
   }
   return rank;
@@ -81,31 +55,28 @@ const compareAds = (descriptionA, descriptionB) => {
   return rankB - rankA;
 };
 
+function getTickedBoxes () {
+  Array.from(featuresCheckboxes).filter((box) => box.checked).map((box) => box.value);
+}
 
-let checkboxes = [];
 featuresCheckboxes.forEach((checkbox) => {
-  checkbox.addEventListener('change', () => {
-    checkboxes =
-      Array.from(featuresCheckboxes)
-        .filter((box) => box.checked)
-        .map((box) => box.value);
-    return checkboxes;
-  });
+  checkbox.addEventListener('change', getTickedBoxes);
 });
 
 function filterFeatures ({offer}) {
+  const checkboxes =  Array.from(featuresCheckboxes)
+    .filter((box) => box.checked)
+    .map((box) => box.value);
   if (!offer.features) {
     return false;
   }
-  if (checkboxes.every((box) => offer.features.includes(box))) {
-    return true;
-  }
+  return (checkboxes.every((box) => offer.features.includes(box)));
 }
 
-function filteredPoints ({offer}) {
-  if (chooseHousingType({offer}) && chooseHousingPriceRange ({offer}) && chooseNumberOfRooms ({offer}) && chooseNumberOfGuests ({offer}) && filterFeatures({offer})) {
-    return true;
-  }
+function filterPoints ({offer}) {
+  return chooseHousingType({offer}) && chooseHousingPriceRange ({offer})
+   && chooseNumberOfRooms ({offer}) && chooseNumberOfGuests ({offer})
+   && filterFeatures({offer});
 }
 
-export {mapFiltersContainer,compareAds, filteredPoints, filterFeatures};
+export {mapFiltersContainer,compareAds, filterPoints, filterFeatures};

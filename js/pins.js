@@ -1,7 +1,8 @@
 import {createModal} from'./popup.js';
-import {makePageActive, debounce} from './utils.js';
+import {makePageActive} from './utils.js';
+import {debounce} from './utils/debounce.js';
 import {fetchData} from './data-remote.js';
-import {mapFiltersContainer, compareAds, filteredPoints} from './filter.js';
+import {mapFiltersContainer, compareAds, filterPoints} from './filter.js';
 
 const SIMILAR_ADS_COUNT = 10;
 const COORDS_DIGITS = 5;
@@ -80,7 +81,7 @@ const clearLayer = () => layerGroup.clearLayers();
 
 const renderFilteredAds = (points) => {
   points = points
-    .filter(filteredPoints)
+    .filter(filterPoints)
     .sort(compareAds)
     .slice(0, SIMILAR_ADS_COUNT);
   renderPoints(points);
