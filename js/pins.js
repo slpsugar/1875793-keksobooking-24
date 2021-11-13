@@ -1,19 +1,27 @@
 import {createModal} from'./popup.js';
 import {makePageActive} from './utils.js';
+import {debounce} from './utils/debounce.js';
 import {fetchData} from './data-remote.js';
+import {mapFiltersContainer, compareAds, filterPoints} from './filter.js';
 
+const SIMILAR_ADS_COUNT = 10;
 const COORDS_DIGITS = 5;
 const CITY_CENTRE_TOKYO = {
   lat: 35.652832,
   lng: 139.839478,
 };
+const RENDER_DELAY = 500;
 
+
+//метки на карте
 const formAddressInput = document.querySelector('#address');
 const initialCoords = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
 formAddressInput.value = initialCoords;
 
-const map = L.map('map-canvas').on('load', () => {makePageActive();
-}).setView(CITY_CENTRE_TOKYO, 12);
+const map = L.map('map-canvas')
+  .on('load', () => {makePageActive();
+  })
+  .setView(CITY_CENTRE_TOKYO, 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -49,11 +57,12 @@ function getCoordinates (evt) {
 mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
 
-function renderPoints (points) {
+const layerGroup = L.layerGroup().addTo(map);
+
+const renderPoints = (points) => {
   points.forEach((point) => {
     const {location} = point;
-
-    const adMarker = L.marker({
+    const marker = L.marker({
       lat: location.lat,
       lng: location.lng,
     },
@@ -61,10 +70,29 @@ function renderPoints (points) {
       icon: pinIcon,
     },
     );
-
-    adMarker.addTo(map).bindPopup(createModal(point));
+    marker.addTo(layerGroup).bindPopup(createModal(point));
   });
-}
-fetchData().then((points) => renderPoints(points));
+  return layerGroup;
+};
+
+//фильтрация
+fetchData().then((points) => {renderPoints(points.slice(0, SIMILAR_ADS_COUNT));});
+const clearLayer = () => layerGroup.clearLayers();
+
+const renderFilteredAds = (points) => {
+  points = points
+    .filter(filterPoints)
+    .sort(compareAds)
+    .slice(0, SIMILAR_ADS_COUNT);
+  renderPoints(points);
+};
+
+mapFiltersContainer.addEventListener('change',
+  debounce (() => {
+    clearLayer();
+    fetchData().then((points) => {
+      renderFilteredAds(points);
+    });
+  }, RENDER_DELAY));
 
 export {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords};
