@@ -71,13 +71,13 @@ formAccomodationTypeInput.addEventListener('input', comparePrices);
 function compareGuests () {
   const roomNumberValue = formRoomNumberInput.value;
   const guestNumberValue = formGuestNumberInput.value;
-  const ratio = {
+  const ratios = {
     '1': ['1'],
     '2': ['1', '2'],
     '3': ['1', '2', '3'],
     '100': ['0'],
   };
-  return ratio[roomNumberValue].includes(guestNumberValue);
+  return ratios[roomNumberValue].includes(guestNumberValue);
 }
 
 function validateGuestNumberFiled () {
