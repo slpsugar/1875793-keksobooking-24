@@ -1,40 +1,40 @@
 const mapFiltersContainer = document.querySelector('.map__filters');
-const housingType = mapFiltersContainer.querySelector('#housing-type');
-const housingPrice = mapFiltersContainer.querySelector('#housing-price');
-const housingRooms = mapFiltersContainer.querySelector('#housing-rooms');
-const housingGuests = mapFiltersContainer.querySelector('#housing-guests');
+const housingTypeElement = mapFiltersContainer.querySelector('#housing-type');
+const housingPriceElement = mapFiltersContainer.querySelector('#housing-price');
+const housingRoomsElement = mapFiltersContainer.querySelector('#housing-rooms');
+const housingGuestsElement = mapFiltersContainer.querySelector('#housing-guests');
 const featuresCheckboxes = mapFiltersContainer.querySelectorAll('.map__checkbox');
 const FEATURES_VALUES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 //тип жилья
 function chooseHousingType ({offer}) {
-  return (housingType.value === offer.type || housingType.value === 'any');
+  return (housingTypeElement.value === offer.type || housingTypeElement.value === 'any');
 }
 
 //цена
 function chooseHousingPriceRange ({offer}) {
-  if (housingPrice.value === 'low') {
+  if (housingPriceElement.value === 'low') {
     return offer.price < 10000;
   }
-  if (housingPrice.value === 'middle') {
+  if (housingPriceElement.value === 'middle') {
     return offer.price >= 10000 && offer.price < 50000;
   }
-  if (housingPrice.value === 'high') {
+  if (housingPriceElement.value === 'high') {
     return offer.price >= 50000;
   }
-  if (housingPrice.value === 'any') {
+  if (housingPriceElement.value === 'any') {
     return true;
   }
 }
 
 //число комнат
 function chooseNumberOfRooms ({offer}) {
-  return (housingRooms.value === String(offer.rooms) || housingRooms.value === 'any');
+  return (housingRoomsElement.value === String(offer.rooms) || housingRoomsElement.value === 'any');
 }
 
 //число гостей
 function chooseNumberOfGuests ({offer}) {
-  return (housingGuests.value === String(offer.guests) || housingGuests.value === 'any');
+  return (housingGuestsElement.value === String(offer.guests) || housingGuestsElement.value === 'any');
 }
 
 //удобства - сортировка
@@ -79,4 +79,4 @@ function filterPoints ({offer}) {
    && filterFeatures({offer});
 }
 
-export {mapFiltersContainer,compareAds, filterPoints, filterFeatures};
+export {mapFiltersContainer, compareAds, filterPoints};
