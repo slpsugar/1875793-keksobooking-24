@@ -72,7 +72,6 @@ const renderPoints = (points) => {
     );
     marker.addTo(layerGroup).bindPopup(createModal(point));
   });
-  return layerGroup;
 };
 
 //фильтрация

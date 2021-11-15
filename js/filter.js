@@ -55,14 +55,6 @@ const compareAds = (descriptionA, descriptionB) => {
   return rankB - rankA;
 };
 
-function getTickedBoxes () {
-  Array.from(featuresCheckboxes).filter((box) => box.checked).map((box) => box.value);
-}
-
-featuresCheckboxes.forEach((checkbox) => {
-  checkbox.addEventListener('change', getTickedBoxes);
-});
-
 function filterFeatures ({offer}) {
   const checkboxes =  Array.from(featuresCheckboxes)
     .filter((box) => box.checked)
