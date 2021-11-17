@@ -97,7 +97,7 @@ formContainer.addEventListener('submit', (evt) => {
   const formData = new FormData(evt.target);
 
   fetch(
-    'https://24.javascript.pages.academy/keksobooking1',
+    'https://24.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body: formData,
