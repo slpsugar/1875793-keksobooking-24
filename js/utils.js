@@ -4,7 +4,7 @@ const interactiveAdElements = mapFormContainer.querySelectorAll('fieldset');
 const mapFiltersForm = document.querySelector('.map__filters');
 const interactiveFilterElements = mapFiltersForm.querySelectorAll('select, fieldset');
 
-function makePageInactive () {
+const makePageInactive = () => {
   mapFormContainer.classList.add('ad-form--disabled');
   interactiveAdElements.forEach((fieldset) => {
     fieldset.setAttribute('disabled', '');
@@ -14,9 +14,9 @@ function makePageInactive () {
   interactiveFilterElements.forEach((element) => {
     element.setAttribute('disabled', '');
   });
-}
+};
 
-function makePageActive () {
+const makePageActive = () => {
   mapFormContainer.classList.remove('ad-form--disabled');
   interactiveAdElements.forEach((fieldset) => {
     fieldset.removeAttribute('disabled', '');
@@ -25,7 +25,7 @@ function makePageActive () {
   interactiveFilterElements.forEach((element) => {
     element.removeAttribute('disabled', '');
   });
-}
+};
 
 makePageInactive();
 
