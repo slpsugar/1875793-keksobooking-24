@@ -16,9 +16,8 @@ const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const accomodationUpload = document.querySelector('.ad-form__upload input[type=file]');
 const accomodationPreview = document.querySelector('.ad-form__photo');
 
-const photoReset = () => accomodationPreview.hasChildNodes() ? accomodationPreview.removeChild(accomodationPreview.childNodes[0]) : '';
-
-const avatarReset = () => {
+const resetPhoto = () => accomodationPreview.hasChildNodes() ? accomodationPreview.removeChild(accomodationPreview.childNodes[0]) : '';
+const resetAvatar = () => {
   avatarPreview.src = DEFAULT_SETTINGS.source;
   avatarPreview.width = DEFAULT_SETTINGS.width;
   avatarPreview.height = DEFAULT_SETTINGS.height;
@@ -38,7 +37,7 @@ avatarUpload.addEventListener('change', () => {
 });
 
 accomodationUpload.addEventListener('change', () => {
-  photoReset();
+  resetPhoto();
   const photo = accomodationUpload.files[0];
   const photoName = photo.name.toLowerCase();
   const matches = FILE_TYPES.some((type) => photoName.endsWith(type));
@@ -51,4 +50,4 @@ accomodationUpload.addEventListener('change', () => {
   }
 });
 
-export {avatarReset, photoReset};
+export {resetAvatar, resetPhoto};
