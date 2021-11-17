@@ -1,10 +1,10 @@
 import {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords} from './pins.js';
-import {avatarReset, photoReset} from './preview.js';
+import {resetAvatar, resetPhoto} from './preview.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
-const DEFAULT_PLACEHOLDER = 5000;
+const DEFAULT_PLACEHOLDER = 1000;
 const minPrices = {
   'bungalow': 0,
   'flat': 1000,
@@ -52,10 +52,12 @@ price.addEventListener('input', () => {
 });
 
 // Стоимость жилья
-const onTypeChange = () => {
+const onTypeInput = () => {
   const typeValue = accomodationType.value;
-  price.setAttribute('min', minPrices[typeValue]);
-  price.setAttribute('placeholder', minPrices[typeValue]);
+  for (let type = 0; type <accomodationType.length; type++){
+    price.setAttribute('min', minPrices[typeValue]);
+    price.placeholder = minPrices[typeValue];
+  }
   price.reportValidity();
 };
 const resetPlaceholder = () => price.setAttribute('placeholder', DEFAULT_PLACEHOLDER);
@@ -95,7 +97,7 @@ formContainer.addEventListener('submit', (evt) => {
   const formData = new FormData(evt.target);
 
   fetch(
-    'https://24.javascript.pages.academy/keksobooking',
+    'https://24.javascript.pages.academy/keksobooking1',
     {
       method: 'POST',
       body: formData,
@@ -113,7 +115,7 @@ formContainer.addEventListener('submit', (evt) => {
     });
 });
 
-const mapReset = () => {
+const resetMap = () => {
   map.closePopup();
   map.setView(CITY_CENTRE_TOKYO, 12);
   mainMarker.setLatLng(CITY_CENTRE_TOKYO);
@@ -122,17 +124,17 @@ const mapReset = () => {
 const onSuccessClick = () => {
   messageSuccess.remove();
   formContainer.reset();
-  avatarReset();
-  photoReset();
+  resetAvatar();
+  resetPhoto();
   resetPlaceholder();
   formAddressInput.value = initialCoords;
-  mapReset();
+  resetMap();
 };
 
 const onResetButtonClick = (evt) => {
   evt.preventDefault();
-  avatarReset();
-  photoReset();
+  resetAvatar();
+  resetPhoto();
   resetPlaceholder();
   onSuccessClick();
 };
@@ -149,12 +151,12 @@ document.addEventListener('keydown', (evt) => {
   if (document.body.contains(messageError)) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      onSuccessClick();
+      onErrorButtonClick();
     }
   }
 });
 
-accomodationType.addEventListener('change', onTypeChange);
+accomodationType.addEventListener('input', onTypeInput);
 roomNumber.addEventListener('change', onGuestNumberInput);
 guestNumber.addEventListener('change', onGuestNumberInput);
 checkinHours.addEventListener('change', onTimeChange);
