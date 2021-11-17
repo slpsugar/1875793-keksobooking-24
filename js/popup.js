@@ -1,13 +1,13 @@
+const localTypes = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalow': 'Бунгало',
+  'hotel': 'Отель',
+};
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-function createModal ({author, offer}) {
-  const localTypes = {
-    'palace': 'Дворец',
-    'flat': 'Квартира',
-    'house': 'Дом',
-    'bungalow': 'Бунгало',
-    'hotel': 'Отель',
-  };
+const createModal = ({author, offer}) => {
   const adElements = similarAdTemplate.cloneNode(true);
 
   if (!offer.title) {
@@ -86,6 +86,6 @@ function createModal ({author, offer}) {
     adElements.querySelector('.popup__avatar').src = author.avatar;
   }
   return adElements;
-}
+};
 
 export {createModal};
