@@ -1,76 +1,69 @@
 import {map, mainMarker, CITY_CENTRE_TOKYO, formAddressInput, initialCoords} from './pins.js';
+import {avatarReset, photoReset} from './preview.js';
 
-const formContainer = document.querySelector('.ad-form');
-const resetButton = formContainer.querySelector('.ad-form__reset');
-
-const messageOnSuccess = document.querySelector('#success').content.querySelector('.success');
-const messageOnError = document.querySelector('#error').content.querySelector('.error');
-const errorButton = messageOnError.querySelector('.error__button');
-
-const formTitleInput = document.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
+const DEFAULT_PLACEHOLDER = 5000;
+const minPrices = {
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
+const formContainer = document.querySelector('.ad-form');
+const title = document.querySelector('#title');
+const price= document.querySelector('#price');
+const roomNumber = document.querySelector('#room_number');
+const guestNumber = document.querySelector('#capacity');
+const checkinHours = document.querySelector('#timein');
+const checkoutHours = document.querySelector('#timeout');
+const accomodationType = document.querySelector('#type');
 
-const formPriceInput = document.querySelector('#price');
-const formRoomNumberInput = document.querySelector('#room_number');
-const formGuestNumberInput = document.querySelector('#capacity');
+const resetButton = formContainer.querySelector('.ad-form__reset');
+const messageSuccess = document.querySelector('#success').content.querySelector('.success');
+const messageError = document.querySelector('#error').content.querySelector('.error');
+const errorButton = messageError.querySelector('.error__button');
 
-const formCheckinHoursInput = document.querySelector('#timein');
-const formCheckoutHoursInput = document.querySelector('#timeout');
-
-const formAccomodationTypeInput = document.querySelector('#type');
-
-
-formTitleInput.addEventListener('input', () => {
-  const titleLength = formTitleInput.value.length;
+//поля для заполнения
+title.addEventListener('input', () => {
+  const titleLength = title.value.length;
   if (titleLength<MIN_TITLE_LENGTH) {
-    formTitleInput.setCustomValidity(`Осталось ${MIN_TITLE_LENGTH - titleLength } симв.`);
+    title.setCustomValidity(`Осталось ${MIN_TITLE_LENGTH - titleLength } симв.`);
   }
   else if (titleLength>MAX_TITLE_LENGTH) {
-    formTitleInput.setCustomValidity(`Удалите ${titleLength - MAX_TITLE_LENGTH} симв.`);
+    title.setCustomValidity(`Удалите ${titleLength - MAX_TITLE_LENGTH} симв.`);
   }
   else {
-    formTitleInput.setCustomValidity('');
+    title.setCustomValidity('');
   }
-  formTitleInput.reportValidity();
+  title.reportValidity();
 });
 
-formPriceInput.addEventListener('input', () => {
-  if (formPriceInput.validity.rangeOverflow) {
-    formPriceInput.setCustomValidity(`Максимальное значение - ${MAX_PRICE_VALUE}`);
+price.addEventListener('input', () => {
+  if (price.validity.rangeOverflow) {
+    price.setCustomValidity(`Максимальное значение - ${MAX_PRICE_VALUE}`);
   }
   else {
-    formPriceInput.setCustomValidity('');
+    price.setCustomValidity('');
   }
-  formPriceInput.reportValidity();
+  price.reportValidity();
 });
 
 // Стоимость жилья
-
-const comparePrices = () => {
-  const accomodationType = formAccomodationTypeInput.value;
-  const minPrices = {
-    'bungalow': 0,
-    'flat': 1000,
-    'hotel': 3000,
-    'house': 5000,
-    'palace': 10000,
-  };
-  for (let type = 0; type <formAccomodationTypeInput.length; type++){
-    formPriceInput.setAttribute('min', minPrices[accomodationType]);
-    formPriceInput.placeholder = minPrices[accomodationType];
-  }
-  formPriceInput.reportValidity();
+const onTypeChange = () => {
+  const typeValue = accomodationType.value;
+  price.setAttribute('min', minPrices[typeValue]);
+  price.setAttribute('placeholder', minPrices[typeValue]);
+  price.reportValidity();
 };
-
-formAccomodationTypeInput.addEventListener('input', comparePrices);
+const resetPlaceholder = () => price.setAttribute('placeholder', DEFAULT_PLACEHOLDER);
 
 // Количество гостей
-
-function compareGuests () {
-  const roomNumberValue = formRoomNumberInput.value;
-  const guestNumberValue = formGuestNumberInput.value;
+const compareGuestNumber = () => {
+  const roomNumberValue = roomNumber.value;
+  const guestNumberValue = guestNumber.value;
   const ratios = {
     '1': ['1'],
     '2': ['1', '2'],
@@ -78,38 +71,27 @@ function compareGuests () {
     '100': ['0'],
   };
   return ratios[roomNumberValue].includes(guestNumberValue);
-}
+};
 
-function validateGuestNumberFiled () {
-  if (!compareGuests()) {
-    formGuestNumberInput.setCustomValidity('Неверное число гостей');
-    formGuestNumberInput.reportValidity();
-    return false;
+const onGuestNumberInput = () => {
+  if (!compareGuestNumber()) {
+    guestNumber.setCustomValidity('Неверное число гостей');
   } else {
-    formGuestNumberInput.setCustomValidity('');
-    formGuestNumberInput.reportValidity();
-    return true;
+    guestNumber.setCustomValidity('');
   }
-}
-
-formRoomNumberInput.addEventListener('input', validateGuestNumberFiled);
-formGuestNumberInput.addEventListener('input', validateGuestNumberFiled);
+  guestNumber.reportValidity();
+};
+onGuestNumberInput();
 
 // Время заезда и выезда
-
-function syncTime (evt) {
-  formCheckinHoursInput.value = evt.target.value;
-  formCheckoutHoursInput.value = evt.target.value;
-}
-
-formCheckinHoursInput.addEventListener('input', syncTime);
-formCheckoutHoursInput.addEventListener('input', syncTime);
+const onTimeChange = (evt) => {
+  checkinHours.value = evt.target.value;
+  checkoutHours.value = evt.target.value;
+};
 
 // Отправка формы
-
 formContainer.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
   const formData = new FormData(evt.target);
 
   fetch(
@@ -125,48 +107,61 @@ formContainer.addEventListener('submit', (evt) => {
       }
       throw new Error (`${response.status} ${response.statusText}`);
     })
-    .then (() => {document.body.appendChild(messageOnSuccess);})
+    .then (() => {document.body.appendChild(messageSuccess);})
     .catch(() => {
-      document.body.appendChild(messageOnError);
+      document.body.appendChild(messageError);
     });
 });
 
-
-function hideMessageOnSuccess () {
-  messageOnSuccess.remove();
-  formContainer.reset();
-  formAddressInput.value = initialCoords;
+const mapReset = () => {
   map.closePopup();
   map.setView(CITY_CENTRE_TOKYO, 12);
   mainMarker.setLatLng(CITY_CENTRE_TOKYO);
-}
+};
 
-function resetForm (evt) {
+const onSuccessClick = () => {
+  messageSuccess.remove();
+  formContainer.reset();
+  avatarReset();
+  photoReset();
+  resetPlaceholder();
+  formAddressInput.value = initialCoords;
+  mapReset();
+};
+
+const onResetButtonClick = (evt) => {
   evt.preventDefault();
-  hideMessageOnSuccess();
-}
+  avatarReset();
+  photoReset();
+  resetPlaceholder();
+  onSuccessClick();
+};
 
-function hideMessageOnError () {
-  messageOnError.remove();
-}
+const onErrorButtonClick = () => messageError.remove();
 
 document.addEventListener('keydown', (evt) => {
-  if (document.body.contains(messageOnSuccess)) {
+  if (document.body.contains(messageSuccess)) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      hideMessageOnSuccess();
+      onSuccessClick();
     }
   }
-  if (document.body.contains(messageOnError)) {
+  if (document.body.contains(messageError)) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      hideMessageOnError();
+      onSuccessClick();
     }
   }
 });
 
-messageOnSuccess.addEventListener('click', hideMessageOnSuccess);
-messageOnError.addEventListener('click', hideMessageOnError);
-errorButton.addEventListener('click', hideMessageOnError);
-resetButton.addEventListener('click', resetForm);
+accomodationType.addEventListener('change', onTypeChange);
+roomNumber.addEventListener('change', onGuestNumberInput);
+guestNumber.addEventListener('change', onGuestNumberInput);
+checkinHours.addEventListener('change', onTimeChange);
+checkoutHours.addEventListener('change', onTimeChange);
+
+messageSuccess.addEventListener('click', onSuccessClick);
+messageError.addEventListener('click', onErrorButtonClick);
+errorButton.addEventListener('click', onErrorButtonClick);
+resetButton.addEventListener('click', onResetButtonClick);
 

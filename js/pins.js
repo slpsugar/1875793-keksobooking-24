@@ -12,7 +12,6 @@ const CITY_CENTRE_TOKYO = {
 };
 const RENDER_DELAY = 500;
 
-
 //метки на карте
 const formAddressInput = document.querySelector('#address');
 const initialCoords = [parseFloat(CITY_CENTRE_TOKYO.lat.toFixed(COORDS_DIGITS)), parseFloat(CITY_CENTRE_TOKYO.lng.toFixed(COORDS_DIGITS))];
@@ -49,10 +48,10 @@ const mainMarker = L.marker(
   },
 );
 
-function getCoordinates (evt) {
+const getCoordinates = (evt) => {
   const addressCoords = evt.target.getLatLng();
   formAddressInput.value = [parseFloat(addressCoords.lat.toFixed(COORDS_DIGITS)), parseFloat(addressCoords.lng.toFixed(COORDS_DIGITS))];
-}
+};
 
 mainMarker.addTo(map);
 mainMarker.on('moveend', getCoordinates);
