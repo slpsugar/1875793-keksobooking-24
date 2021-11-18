@@ -4,7 +4,7 @@ import {resetAvatar, resetPhoto} from './preview.js';
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
-const DEFAULT_PLACEHOLDER = 1000;
+const DEFAULT_VALUE = 1000;
 const minPrices = {
   'bungalow': 0,
   'flat': 1000,
@@ -60,7 +60,10 @@ const onTypeInput = () => {
   }
   price.reportValidity();
 };
-const resetPlaceholder = () => price.setAttribute('placeholder', DEFAULT_PLACEHOLDER);
+const resetDefaultPriceValues = () => {
+  price.setAttribute('placeholder', DEFAULT_VALUE);
+  price.setAttribute('min', DEFAULT_VALUE);
+};
 
 // Количество гостей
 const compareGuestNumber = () => {
@@ -126,7 +129,7 @@ const onSuccessClick = () => {
   formContainer.reset();
   resetAvatar();
   resetPhoto();
-  resetPlaceholder();
+  resetDefaultPriceValues();
   formAddressInput.value = initialCoords;
   resetMap();
 };
@@ -135,7 +138,7 @@ const onResetButtonClick = (evt) => {
   evt.preventDefault();
   resetAvatar();
   resetPhoto();
-  resetPlaceholder();
+  resetDefaultPriceValues();
   onSuccessClick();
 };
 
