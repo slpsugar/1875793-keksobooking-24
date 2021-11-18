@@ -1,14 +1,13 @@
 const FEATURES_VALUES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const PRICE_RANGE = {
-  low: 'low',
-  middle: 'middle',
-  high: 'high',
+const PriceRange = {
+  LOW: 'low',
+  MIDDLE: 'middle',
+  HIGH: 'high',
 };
-const PRICE_VALUES = {
-  low: 10000,
-  high: 50000,
+const PriceValue = {
+  LOW: 10000,
+  HIGH: 50000,
 };
-
 const mapFiltersContainer = document.querySelector('.map__filters');
 const housingType = mapFiltersContainer.querySelector('#housing-type');
 const housingPrice = mapFiltersContainer.querySelector('#housing-price');
@@ -21,14 +20,14 @@ const chooseType = ({offer}) => housingType.value === offer.type || housingType.
 
 //цена
 const choosePrice = ({offer}) => {
-  if (housingPrice.value === PRICE_RANGE.low) {
-    return offer.price < PRICE_VALUES.low;
+  if (housingPrice.value === PriceRange.LOW) {
+    return offer.price < PriceValue.LOW;
   }
-  if (housingPrice.value === PRICE_RANGE.middle) {
-    return offer.price >= PRICE_VALUES.low && offer.price < PRICE_VALUES.high;
+  if (housingPrice.value === PriceRange.MIDDLE) {
+    return offer.price >= PriceValue.LOW && offer.price < PriceValue.HIGH;
   }
-  if (housingPrice.value === PRICE_RANGE.high) {
-    return offer.price >= PRICE_VALUES.high;
+  if (housingPrice.value === PriceRange.HIGH) {
+    return offer.price >= PriceValue.HIGH;
   }
   if (housingPrice.value === 'any') {
     return true;

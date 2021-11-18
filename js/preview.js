@@ -1,10 +1,10 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-const FULL_SIZE_AVATAR = {
+const fullSizeAvatar = {
   width: '70',
   height: '70',
   padding: '0',
 };
-const DEFAULT_SETTINGS = {
+const defaultSettings = {
   source: 'img/muffin-grey.svg',
   width: '40',
   height: '44',
@@ -18,9 +18,9 @@ const accomodationPreview = document.querySelector('.ad-form__photo');
 
 const resetPhoto = () => accomodationPreview.hasChildNodes() ? accomodationPreview.removeChild(accomodationPreview.childNodes[0]) : '';
 const resetAvatar = () => {
-  avatarPreview.src = DEFAULT_SETTINGS.source;
-  avatarPreview.width = DEFAULT_SETTINGS.width;
-  avatarPreview.height = DEFAULT_SETTINGS.height;
+  avatarPreview.src = defaultSettings.source;
+  avatarPreview.width = defaultSettings.width;
+  avatarPreview.height = defaultSettings.height;
   avatarPreviewContainer.removeAttribute('style');
 };
 
@@ -30,9 +30,9 @@ avatarUpload.addEventListener('change', () => {
   const matches = FILE_TYPES.some((type) => avatarName.endsWith(type));
   if (matches) {
     avatarPreview.src = URL.createObjectURL(avatar);
-    avatarPreview.width = FULL_SIZE_AVATAR.width;
-    avatarPreview.height = FULL_SIZE_AVATAR.height;
-    avatarPreviewContainer.style.padding = FULL_SIZE_AVATAR.padding;
+    avatarPreview.width = fullSizeAvatar.width;
+    avatarPreview.height = fullSizeAvatar.height;
+    avatarPreviewContainer.style.padding = fullSizeAvatar.padding;
   }
 });
 
@@ -44,8 +44,8 @@ accomodationUpload.addEventListener('change', () => {
   if (matches) {
     const accomodationPicture = document.createElement('img');
     accomodationPicture.src = URL.createObjectURL(photo);
-    accomodationPicture.width = FULL_SIZE_AVATAR.width;
-    accomodationPicture.height = FULL_SIZE_AVATAR.height;
+    accomodationPicture.width = fullSizeAvatar.width;
+    accomodationPicture.height = fullSizeAvatar.height;
     accomodationPreview.appendChild(accomodationPicture);
   }
 });
